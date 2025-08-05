@@ -25,7 +25,7 @@ jobs:
             git restore data/train.csv
 
             # Poison the data
-            python poison_data.py $level
+            python poison_data.py --poison_level $level
 
             # Train the model
             python train.py
