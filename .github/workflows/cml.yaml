@@ -41,6 +41,6 @@ jobs:
 
       - name: "Create CML report"
         env:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          repo_token: ${{ secrets.CML_PAT }}
         run: |
           cml comment create report.md
