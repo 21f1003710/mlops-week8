@@ -1,0 +1,46 @@
+name: Model Training and Reporting
+
+on: [push]
+
+jobs:
+  train-and-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: "Set up Python"
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: "Install dependencies"
+        run: pip install -r requirements.txt
+
+      - name: "Train on multiple poisoning levels"
+        run: |
+          for level in 0.05 0.10 0.20; do
+            echo "Running for poison level $level"
+            # Restore original data (if needed)
+            git restore data/train.csv
+
+            # Poison the data
+            python poison_data.py $level
+
+            # Train the model
+            python train.py
+
+            # Append results
+            echo "## Accuracy for poison level $level" >> report.md
+            cat results/metrics.json | jq -r '.accuracy' >> report.md
+            echo "" >> report.md
+          done
+
+      - name: "Setup CML"
+        uses: iterative/setup-cml@v2
+
+      - name: "Create CML report"
+        env:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cml comment create report.md
