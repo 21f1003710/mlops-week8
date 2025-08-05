@@ -14,7 +14,7 @@ except Exception:
     branch_name = "local" 
 
 
-mlflow.set_tracking_uri('http://35.223.208.118:8100')
+mlflow.set_tracking_uri('http://34.30.195.233:8100')
 
 def train_model():
     """

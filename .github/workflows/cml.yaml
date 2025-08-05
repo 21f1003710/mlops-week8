@@ -19,7 +19,7 @@ jobs:
 
       - name: "Train on multiple poisoning levels"
         run: |
-          for level in 0.05 0.10 0.20; do
+          for level in 0.05 0.10 0.20 0.30 0.50; do
             echo "Running for poison level $level"
             # Restore original data (if needed)
             git restore data/train.csv
